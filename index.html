@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haseeb | Data Organizer Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ویب سائٹ کا مین ڈیزائن */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f11;
+            color: #e0e0e0;
+        }
+        /* اوپر والا مینیو (Navbar) */
+        header {
+            background-color: #1a1a1d;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #00ffcc;
+        }
+        header h1 {
+            margin: 0;
+            color: #00ffcc;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #00ffcc;
+        }
+        /* ہیرو سیکشن (تعارف) */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #1a1a1d 0%, #0f0f11 100%);
+        }
+        .hero h2 {
+            font-size: 48px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #aaaaaa;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .btn {
+            background-color: #00ffcc;
+            color: #0f0f11;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #00ccaa;
+        }
+        /* ڈیش بورڈ سیکشن */
+        .dashboard-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .dashboard-section h3 {
+            font-size: 32px;
+            color: #00ffcc;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        select {
+            padding: 10px;
+            background-color: #1a1a1d;
+            color: white;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        /* گراف کا ڈبہ */
+        .chart-container {
+            background-color: #1a1a1d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.1);
+        }
+        /* فوٹر */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #1a1a1d;
+            color: #777;
+            margin-top: 50px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>LO DATA</h1>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#dashboard">Live Dashboard</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h2>ڈیٹا کو فیصلوں میں بدلیں</h2>
+        <p>میں ایک پروفیشنل ڈیٹا آرگنائزر ہوں۔ میں بکھرے ہوئے ڈیٹا کو صاف کر کے اسے خوبصورت اور انٹرایکٹو ڈیش بورڈز میں تبدیل کرتا ہوں تاکہ بزنس کو منافع بخش بنایا جا سکے۔</p>
+        <a href="#dashboard" class="btn">میرا کام دیکھیں</a>
+    </section>
+
+    <section class="dashboard-section" id="dashboard">
+        <h3>فیکٹری پرفارمنس پورٹ فولیو</h3>
+        
+        <div class="controls">
+            <select id="yearFilter" onchange="updateChart()">
+                <option value="2021">سال 2021</option>
+                <option value="2022">سال 2022</option>
+            </select>
+            <select id="workerFilter" onchange="updateChart()">
+                <option value="all">تمام ورکرز</option>
+                <option value="ali">علی</option>
+                <option value="kamran">کامران</option>
+            </select>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="myChart" height="100"></canvas>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <p>Designed for LO | Data Organizer Portfolio &copy; 2026</p>
+    </footer>
+
+    <script>
+        // تمہارا فرضی فیکٹری ڈیٹا
+        const factoryData = {
+            "2021": {
+                "all": [50000, 60000, 45000, 70000, 80000, 90000],
+                "ali": [20000, 25000, 15000, 30000, 35000, 40000],
+                "kamran": [30000, 35000, 30000, 40000, 45000, 50000]
+            },
+            "2022": {
+                "all": [70000, 85000, 60000, 95000, 110000, 130000],
+                "ali": [35000, 40000, 25000, 45000, 50000, 60000],
+                "kamran": [35000, 45000, 35000, 50000, 60000, 70000]
+            }
+        };
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'منافع (Rs)',
+                    data: factoryData["2021"]["all"],
+                    backgroundColor: '#00ffcc',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#333' } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff' } }
+                }
+            }
+        });
+
+        // جب کوئی فلٹر بدلے گا تو یہ فنکشن گراف کو اپڈیٹ کرے گا
+        function updateChart() {
+            const year = document.getElementById('yearFilter').value;
+            const worker = document.getElementById('workerFilter').value;
+            myChart.data.datasets[0].data = factoryData[year][worker];
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
